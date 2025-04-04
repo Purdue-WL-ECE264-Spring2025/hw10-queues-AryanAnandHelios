@@ -74,9 +74,6 @@ int number_of_moves(struct game_state startState) {
   }
 
   free_list(seenStates);
-  return -1;
-}
+    return -1;
+  }
 
-  free_list(visited);
-  return -1; // No solution found
-}
