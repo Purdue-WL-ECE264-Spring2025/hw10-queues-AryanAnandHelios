@@ -1,98 +1,81 @@
+
 #include "linked_list.h"
 #include <stdlib.h>
 
-/* Creates a new linked list node with the given value
- * Returns NULL if memory allocation fails
- */
-struct list_node *new_node(size_t value) {
-  struct list_node *node = malloc(sizeof(struct list_node));
-  if (node) {
-    node->value = value;
-    node->next = NULL;
+struct list_node *new_node(size_t nodeValue) {
+  struct list_node *newNode = malloc(sizeof(struct list_node));
+  if (newNode) {
+    newNode->value = nodeValue;
+    newNode->next = NULL;
   }
-  return node;
+  return newNode;
 }
 
-/* Inserts a new node with given value at the start of the list
- * If memory allocation fails, the list remains unchanged
- */
-void insert_at_head(struct linked_list *list, size_t value) {
-  struct list_node *node = new_node(value);
-  if (node) {
-    node->next = list->head;
-    list->head = node;
+void insert_at_head(struct linked_list *list, size_t nodeValue) {
+  struct list_node *newNode = new_node(nodeValue);
+  if (newNode) {
+    newNode->next = list->head;
+    list->head = newNode;
   }
 }
 
-/* Inserts a new node with given value at the end of the list
- * If memory allocation fails, the list remains unchanged
- */
-void insert_at_tail(struct linked_list *list, size_t value) {
-  struct list_node *node = new_node(value);
-  if (!node) {
+void insert_at_tail(struct linked_list *list, size_t nodeValue) {
+  struct list_node *newNode = new_node(nodeValue);
+  if (!newNode) {
     return;
   }
 
   if (!list->head) {
-    list->head = node;
+    list->head = newNode;
     return;
   }
 
-  struct list_node *current = list->head;
-  while (current->next) {
-    current = current->next;
+  struct list_node *lastNode = list->head;
+  while (lastNode->next) {
+    lastNode = lastNode->next;
   }
-  current->next = node;
+  lastNode->next = newNode;
 }
 
-/* Removes and returns the value from the head of the list
- * Returns 0 if the list is empty
- */
 size_t remove_from_head(struct linked_list *list) {
   if (!list->head) {
     return 0;
   }
-  struct list_node *temp = list->head;
-  size_t value = temp->value;
-  list->head = temp->next;
-  free(temp);
-  return value;
+  struct list_node *firstNode = list->head;
+  size_t nodeValue = firstNode->value;
+  list->head = firstNode->next;
+  free(firstNode);
+  return nodeValue;
 }
 
-/* Removes and returns the value from the tail of the list
- * Returns 0 if the list is empty
- */
 size_t remove_from_tail(struct linked_list *list) {
   if (!list->head) {
     return 0;
   }
 
   if (!list->head->next) {
-    size_t value = list->head->value;
+    size_t nodeValue = list->head->value;
     free(list->head);
     list->head = NULL;
-    return value;
+    return nodeValue;
   }
 
-  struct list_node *current = list->head;
-  while (current->next->next) {
-    current = current->next;
+  struct list_node *secondLastNode = list->head;
+  while (secondLastNode->next->next) {
+    secondLastNode = secondLastNode->next;
   }
 
-  size_t value = current->next->value;
-  free(current->next);
-  current->next = NULL;
-  return value;
+  size_t nodeValue = secondLastNode->next->value;
+  free(secondLastNode->next);
+  secondLastNode->next = NULL;
+  return nodeValue;
 }
 
-/* Frees all nodes in the linked list
- * Should be called when the list is no longer needed
- */
 void free_list(struct linked_list list) {
-  struct list_node *current = list.head;
-  while (current) {
-    struct list_node *next = current->next;
-    free(current);
-    current = next;
+  struct list_node *currentNode = list.head;
+  while (currentNode) {
+    struct list_node *nextNode = currentNode->next;
+    free(currentNode);
+    currentNode = nextNode;
   }
 }
